@@ -2,6 +2,7 @@ package re.projecwebservice.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authorization.AuthorizationDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -13,6 +14,16 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandle {
+
+    @ExceptionHandler(AuthorizationDeniedException.class)
+    public ResponseEntity<Map<String, Object>> handleAccessDenied(AuthorizationDeniedException ex) {
+        Map<String, Object> response = new HashMap<>();
+        response.put("status", HttpStatus.FORBIDDEN.value());
+        response.put("error", "Forbidden");
+        response.put("message", "Bạn không có quyền truy cập vào tài nguyên này!");
+
+        return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
+    }
     // vuale
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handLerMethodNotArgumentException(MethodArgumentNotValidException e)

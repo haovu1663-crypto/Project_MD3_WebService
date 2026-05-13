@@ -54,7 +54,9 @@ public class SecurityConfig {
 //                .build();
 //        // lưu 3 tài khoản này vào ứng dụng . đưa vào vùng nhớ của sooring Security
 //        return new InMemoryUserDetailsManager(admin, user, man);
-//    }
+//
+//    @Autowired
+//    private CustomAccessDeniedHandler accessDeniedHandler;
     @Autowired
     private UserDetailsService userDetailsService; //thực chất là UserDetailCustom
     // thực hiện xác thực dựa trên userDetaiService và passWork encoder
@@ -105,7 +107,11 @@ public class SecurityConfig {
                 // cơ chế dăng nhâp http basic
                 // cơ chế dăng nhâp http basic
                 .formLogin(Customizer.withDefaults())
-                .httpBasic(Customizer.withDefaults()); // mặc đinh username pass : /login - POST
+                .httpBasic(Customizer.withDefaults());
+
+//                .exceptionHandling(ex -> ex
+//                .accessDeniedHandler(accessDeniedHandler) // Đăng ký ở đây
+//        ); // mặc đinh username pass : /login - POST
         return http.build();
     }
     //
