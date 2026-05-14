@@ -1,9 +1,6 @@
 package re.projecwebservice.dto.resquest;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
@@ -12,20 +9,22 @@ import lombok.Getter;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import re.projecwebservice.entity.InternshipPhases;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 @Getter
 @Setter
-public class InternshipPhasesRequest {
-    @NotBlank(message = "không được để chống ")
-    private String phaseName;
-    // không nằm trong quá khứ
+public class AssessmentRoundsResquest {
+    // đối tượng
+    private Integer phase_id;
+    @NotBlank
+    private String roundName;
+    @NotNull
     @FutureOrPresent
-    @NotNull
     private LocalDate startDate;
-    @Future
     @NotNull
+    @Future
     private LocalDate endDate;
     private String description;
 }
