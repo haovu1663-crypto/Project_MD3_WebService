@@ -62,4 +62,35 @@ public class RoundCriteriaService implements IRoundCriteriaService {
                         "Không tìm thấy tiêu chí đợt đánh giá với id: " + roundCriterionId));
         return mapper.mapEntityToResponse(roundCriteria);
     }
+
+    @Override
+    public RoundCriteriaRespone update(Integer roundCriterionId, RoundCriteriaRequest request) throws ResourceNotFoundException,DataConfickException {
+       if(!roundCriteriaRepository.existsById(roundCriterionId)){
+           throw new ResourceNotFoundException("không tìm thấy tiêu chí của đợt đánh giá :"+roundCriterionId);
+       }
+        AssessmentRounds round = assessmentRoundsRepository.findById(request.getRound_id())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Không tìm thấy đợt đánh giá với id: " + request.getRound_id()));
+        EvaluationCriteria criterion = evaluationCriteriaRepository.findById(request.getCriterion_id())
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Không tìm thấy tiêu chí đánh giá với id: " + request.getCriterion_id()));
+        //kiểm tra đợt đánh giá và tiêu chí đánh giá đã tồn tại hay chưa
+        if (roundCriteriaRepository.existsByRound_RoundIdAndCriterion_CriterionId(
+                request.getRound_id(), request.getCriterion_id())) {
+            throw new DataConfickException(
+                    "Tiêu chí id " + request.getCriterion_id()
+                            + " đã tồn tại trong đợt đánh giá id " + request.getRound_id());
+        }
+        RoundCriteria roundCriteria = mapper.mapRequestToEntity(request);
+        roundCriteria.setRoundCriterionId(roundCriterionId);
+        return mapper.mapEntityToResponse(roundCriteriaRepository.save(roundCriteria));
+    }
+    @Override
+    public RoundCriteriaRespone delete(Integer roundCriterionId) throws ResourceNotFoundException {
+        RoundCriteria roundCriteria = roundCriteriaRepository.findById(roundCriterionId)
+                .orElseThrow(() -> new ResourceNotFoundException(
+                        "Không tìm thấy tiêu chí đợt đánh giá với id: " + roundCriterionId));
+        roundCriteriaRepository.delete(roundCriteria);
+        return mapper.mapEntityToResponse(roundCriteria);
+    }
 }

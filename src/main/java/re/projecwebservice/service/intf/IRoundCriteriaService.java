@@ -12,4 +12,8 @@ public interface IRoundCriteriaService {
             throws DataConfickException, ResourceNotFoundException;
     List<RoundCriteriaRespone> getAllByRoundId(Integer roundId) throws ResourceNotFoundException;
     RoundCriteriaRespone getById(Integer roundCriterionId) throws ResourceNotFoundException;
+
+    RoundCriteriaRespone update(Integer roundCriterionId, RoundCriteriaRequest request)
+            throws ResourceNotFoundException, DataConfickException;
+    RoundCriteriaRespone delete(Integer roundCriterionId) throws ResourceNotFoundException;
 }

@@ -1,0 +1,98 @@
+1#
+   {
+    POST http://localhost:8080/api/auth/login
+    // hợp lệ
+    {
+        "username":"admin1",
+        "password":"pass123"
+    }
+    {
+            "username":"student1",
+            "password":"pass123"
+    }
+    // lôi sai dữ liêu
+      {
+            "username":"admin1221",
+            "password":"pass12123"
+        }
+   }
+2#
+   {
+    GET http://localhost:8080/api/auth/me
+   }
+3#
+   {
+     GET http://localhost:8080/api/users
+   }
+4#
+   {
+    GET http://localhost:8080/api/users/1
+    GET http://localhost:8080/api/users/2
+    GET http://localhost:8080/api/users/3
+   }
+5#
+   {
+     // hợp lệ
+      {
+                "username": "student1",
+                "passwordHash": "pass123",
+                "fullName": "Nguyen Van a",
+                "email": "nguyennama@gmail.com",
+                "phoneNumber": "0901234567",
+                "role": "ROLE_STUDENT"
+      }{
+                            "username": "studen2",
+                            "passwordHash": "pass123",
+                            "fullName": "Nguyen Van c",
+                            "email": "nguyenc@gmail.com",
+                            "phoneNumber": "0901234457",
+                             "role": "ROLE_STUDENT"
+             }
+
+          {
+                       "username": "mentor1",
+                       "passwordHash": "pass123",
+                       "fullName": "Nguyen Van h",
+                       "email": "ksdbjfk@gmail.com",
+                       "phoneNumber": "0901286567",
+                       "role": "ROLE_MENTOR"
+             }
+             {
+                                   "username": "mentor2",
+                                   "passwordHash": "pass123",
+                                   "fullName": "Nguyen Van jh",
+                                   "email": "hsdj@gmail.com",
+                                   "phoneNumber": "0906664457",
+                                    "role": "ROLE_MENTOR"
+             }
+              {
+                                    "username": "admin1",
+                                    "passwordHash": "pass123",
+                                    "fullName": "Nguyen Van h",
+                                    "email": "ksdrk@gmail.com",
+                                    "phoneNumber": "0901986567",
+                                    "role": "ROLE_ADMIN"
+               }
+                          {
+                                                "username": "admin2",
+                                                "passwordHash": "pass123",
+                                                "fullName": "Nguyen Van jh",
+                                                "email": "hssfdj@gmail.com",
+                                                "phoneNumber": "0906984457",
+                                                 "role": "ROLE_ADMIN"
+                                 }
+      // lỗi lặp dữ liệu
+      {
+                 "username": "student2",
+                 "passwordHash": "pass123",
+                 "fullName": "Nguyen Van b",
+                 "email": "nguyennama@mail.com",
+                 "phoneNumber": "0901234567",
+                  "role": "ROLE_STUDENT"
+      }
+
+   }
+6#
+  {
+
+  }

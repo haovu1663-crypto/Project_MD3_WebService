@@ -5,12 +5,14 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import re.projecwebservice.dto.respone.ApiResponse;
 import re.projecwebservice.dto.respone.UserRespone;
 import re.projecwebservice.dto.resquest.Login;
 import re.projecwebservice.dto.resquest.Register;
 import re.projecwebservice.entity.Users;
+import re.projecwebservice.exception.DataConfickException;
 import re.projecwebservice.exception.ResourceNotFoundException;
 import re.projecwebservice.service.UserService;
 import re.projecwebservice.service.intf.IUserService;
@@ -25,14 +27,15 @@ import java.util.List;
 public class UserController {
     private final IUserService userService;
     @PostMapping("/auth/login")
-    public ResponseEntity<?> login(@RequestBody Login login) {
+    public ResponseEntity<?> login(@Valid@RequestBody Login login) {
         return  new ResponseEntity<>(userService.login(login), HttpStatus.OK);
     }
-    @PostMapping("/users")
-    public ResponseEntity<?> rigister(@Valid @RequestBody Register register) {
+    @PostMapping("/users/register")
+    public ResponseEntity<?> rigister(@Valid @RequestBody Register register) throws DataConfickException {
         return new ResponseEntity<>(userService.register(register), HttpStatus.CREATED);
     }
-    @GetMapping("/me") // Nên thêm path /me cho rõ ràng
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MENTOR', 'ROLE_STUDENT')")
+    @GetMapping("auth/me") // Nên thêm path /me cho rõ ràng
     public ResponseEntity<?> getMe() {
         // Truyền cả request vào service để xử lý
         return new ResponseEntity<>(userService.getMe(), HttpStatus.OK);
@@ -54,7 +57,7 @@ public class UserController {
         return  new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
     @PutMapping("/users/{id}")
-    public ResponseEntity<?> updateUser(@PathVariable Integer id, @Valid @RequestBody Register register) throws ResourceNotFoundException {
+    public ResponseEntity<?> updateUser(@PathVariable Integer id, @Valid @RequestBody Register register) throws ResourceNotFoundException, DataConfickException {
         UserRespone userRespone = userService.update(register,id);
         ApiResponse<UserRespone> apiResponse = new ApiResponse<>(
                 "upadte user ","200 OK",userRespone,null, LocalDateTime.now()

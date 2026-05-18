@@ -16,6 +16,7 @@ import re.projecwebservice.dto.respone.UserRespone;
 import re.projecwebservice.dto.resquest.Login;
 import re.projecwebservice.dto.resquest.Register;
 import re.projecwebservice.entity.Users;
+import re.projecwebservice.exception.DataConfickException;
 import re.projecwebservice.exception.ResourceNotFoundException;
 import re.projecwebservice.respository.UserRespository;
 import re.projecwebservice.service.intf.IUserService;
@@ -60,8 +61,11 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public RegisterRespone register(Register register) {
+    public RegisterRespone register(Register register) throws DataConfickException {
         Users user = modelMapper.map(register, Users.class);
+        if(userRespository.existsByEmail(register.getEmail())){
+            throw new DataConfickException("Email :"+register.getEmail()+" Đã ồn tại ");
+        }
         user.setPasswordHash(passwordEncoder.encode(register.getPasswordHash()));
         user.setCreatedAt(LocalDateTime.now());
         user.setIsActive(true);
@@ -96,8 +100,12 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserRespone update(Register register,Integer id) throws ResourceNotFoundException {
+    public UserRespone update(Register register,Integer id) throws ResourceNotFoundException, DataConfickException {
         Users users = userRespository.findById(id).orElseThrow(()->new ResourceNotFoundException("User Dont Exit"));
+        Users checkEmail =userRespository.findByEmail(register.getEmail());
+        if(checkEmail!=null && !checkEmail.getUserId().equals(users.getUserId())){
+            throw new DataConfickException("Email :"+register.getEmail()+" Đã ồn tại ");
+        }
         users.setFullName(register.getFullName());
         users.setPasswordHash(passwordEncoder.encode(register.getPasswordHash()));
         users.setRole(register.getRole());

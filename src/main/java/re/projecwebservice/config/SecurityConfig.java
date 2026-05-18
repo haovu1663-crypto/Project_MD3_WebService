@@ -83,15 +83,15 @@ public class SecurityConfig {
                 // phân quyền cho các API theo đường dẫn
                 .authorizeHttpRequests(
                         req->
-                                req    .requestMatchers("/api/users").hasAuthority("ROLE_ADMIN")
-                                        .requestMatchers("/api/users/**").hasAuthority("ROLE_ADMIN")
+                                req    .requestMatchers("/api/users/register").permitAll()
+
                                         .requestMatchers("/api/auth/login").permitAll()
-                                        .requestMatchers("/api/auth/me").hasAnyAuthority("ROLE_STUDENT", "ROLE_ADMIN","ROLE_MENTOR")
+
 
                                         .requestMatchers("/api/v1/admin/**").hasAuthority("ADMIN") // admin ms đc truy cập api này
                                         .requestMatchers("/api/v1/user/**").hasAuthority("USER")//requestMatcher để so khớp kêt quả
                                         .requestMatchers("/api/v1/manager/**").hasAuthority("ROLE_MANAGER")
-
+                                        .requestMatchers("/api/users/register").permitAll()
                                         .requestMatchers("/api/v1/employees/register").permitAll()
                                         .anyRequest().authenticated() // các api khác thì phải xác thực thì ms vào đc(đăng nhập)
                 )

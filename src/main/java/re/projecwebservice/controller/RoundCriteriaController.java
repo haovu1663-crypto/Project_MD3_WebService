@@ -53,4 +53,27 @@ public class RoundCriteriaController {
         );
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PutMapping("/round_criteria/{round_criterion_id}")
+    public ResponseEntity<?> updateWeight(
+            @PathVariable("round_criterion_id") Integer roundCriterionId,
+            @Valid @RequestBody RoundCriteriaRequest request)
+            throws ResourceNotFoundException, DataConfickException {
+        RoundCriteriaRespone data = roundCriteriaService.update(roundCriterionId, request);
+        ApiResponse<RoundCriteriaRespone> apiResponse = new ApiResponse<>(
+                "update round criteria weight", "200 OK", data, null, LocalDateTime.now()
+        );
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    }
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @DeleteMapping("/round_criteria/{round_criterion_id}")
+    public ResponseEntity<?> delete(
+            @PathVariable("round_criterion_id") Integer roundCriterionId)
+            throws ResourceNotFoundException {
+        RoundCriteriaRespone data = roundCriteriaService.delete(roundCriterionId);
+        ApiResponse<RoundCriteriaRespone> apiResponse = new ApiResponse<>(
+                "delete round criteria", "200 OK", data, null, LocalDateTime.now()
+        );
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    }
 }
