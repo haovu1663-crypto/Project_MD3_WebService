@@ -8,6 +8,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 public class StudentRespone {
+    private String fullName;
     private Integer studentId;
     private String studentCode;
     private String major;

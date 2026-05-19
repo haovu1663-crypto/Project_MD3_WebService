@@ -68,7 +68,7 @@ public class InternshipPhasesController {
     @DeleteMapping("/internship_phases/{phase_id}")
     public ResponseEntity<?> deleteInternshipPhase(
             @PathVariable("phase_id") Integer phaseId)
-            throws ResourceNotFoundException {
+            throws ResourceNotFoundException, DataConfickException {
         InternshipPhasesRespone data = internshipPhasesService.delete(phaseId);
         ApiResponse<InternshipPhasesRespone> apiResponse = new ApiResponse<>(
                 "delete internship phase", "200 OK", data, null, LocalDateTime.now()

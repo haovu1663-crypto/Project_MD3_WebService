@@ -1,3 +1,4 @@
+
 1#
    {
     POST http://localhost:8080/api/auth/login
@@ -28,10 +29,11 @@
    {
     GET http://localhost:8080/api/users/1
     GET http://localhost:8080/api/users/2
-    GET http://localhost:8080/api/users/3
+
    }
 5#
    {
+    POST http://localhost:8080/api/users
      // hợp lệ
       {
                 "username": "student1",
@@ -48,6 +50,14 @@
                             "phoneNumber": "0901234457",
                              "role": "ROLE_STUDENT"
              }
+             {
+                                         "username": "studen3",
+                                         "passwordHash": "pass123",
+                                         "fullName": "Nguyen Van c",
+                                         "email": "nguyeinc@gmail.com",
+                                         "phoneNumber": "0981234457",
+                                          "role": "ROLE_STUDENT"
+                          }
 
           {
                        "username": "mentor1",
@@ -94,5 +104,485 @@
    }
 6#
   {
+   PUT http://localhost:8080/api/users/1
+   // hợp lệ
+     {
+                          "username": "student12",
+                          "passwordHash": "pass123",
+                          "fullName": "Nguyen Van gdh",
+                          "email": "haomilode@gmail.com",
+                          "phoneNumber": "0906763457",
+                           "role": "ROLE_STUDENT"
+     }
+   // trung dữ liệu
+     {
+                           "username": "mentor2",
+                           "passwordHash": "pass123",
+                          "fullName": "Nguyen Van gdh",
+                           "email": "hsdj@gmail.com",
+                           "phoneNumber": "0906664457",
+                             "role": "ROLE_STUDENT"
+     }
+  }
+7#
+  {
+  // hợp lệ
+  http://localhost:8080/api/users/1/status
+  // không hợp lệ
+  http://localhost:8080/api/users/100/status
+  }
+
+ 8#
+   {
+    // hợp lệ
+    http://localhost:8080/api/users/1/role?role=ROLE_MENTOR
+    http://localhost:8080/api/users/1/role?role=ROLE_STUDENT
+    // trường hợp không thể đổi quyềm của admin
+    http://localhost:8080/api/users/5/role?role=ROLE_STUDENT
+   }
+9#
+  {
+    http://localhost:8080/api/users/3
+  }
+10#
+  {
+    GET http://localhost:8080/api/students
+  }
+11#
+  {
+   GET http://localhost:8080/api/students/1
+   GET http://localhost:8080/api/students/1
+  }
+  {
+  POST http://localhost:8080/api/students
+  // hợp lệ
+     {
+       "studentId": 1,
+       "studentCode": "SV001",
+       "major": "Công nghệ thông tin",
+       "clazz": "CNTT-01",
+       "dateOfBirth": "2003-05-15",
+       "address": "123 Nguyễn Huệ, Quận 1, TP.HCM"
+     }
+     {
+       "studentId": 2,
+       "studentCode": "SV002",
+       "major": "Công nghệ thông tin",
+       "clazz": "CNTT-01",
+       "dateOfBirth": "2003-05-15",
+       "address": "123 Nguyễn Huệ, Quận 1, TP.HCM"
+     }
+    // trùng dữ liệu và studnet đã đăng ký
+    {
+      "studentId": 2,
+      "studentCode": "SV002",
+      "major": "Công nghệ ",
+      "clazz": "CNTT-08",
+      "dateOfBirth": "2007-05-15",
+      "address": "123 Nguyễn Huệ, Quận 1, TP.HCM"
+    }
+  }
+13#
+   {
+   http://localhost:8080/api/students/{id}
+    // hợp le
+    {
+      "studentId": 1,
+      "studentCode": "SV001",
+      "major": "Công nghệ thông tin",
+      "clazz": "CNTT-81",
+      "dateOfBirth": "2005-08-15",
+      "address": "123 khánh toàn, Quận 1, TP.HCM"
+    }
+        {
+          "studentId": 3,
+          "studentCode": "SV003",
+          "major": "Công nghệ thông tin",
+          "clazz": "CNTT-81",
+          "dateOfBirth": "2005-08-15",
+          "address": "123 khánh toàn, Quận 1, TP.HCM"
+        }
+    // lỗi trùng dữ liệu
+     {
+          "studentId": 2,
+          "studentCode": "SV002",
+          "major": "Công nghệ thông tin",
+          "clazz": "CNTT-81",
+          "dateOfBirth": "2005-08-15",
+          "address": "123 khánh toàn, Quận 1, TP.HCM"
+        }
+   }
+14#
+   {
+   GET http://localhost:8080/api/mentors
+   }
+15#
+   {
+   GET http://localhost:8080/api/mentors/1
+   }
+16#
+  {
+  POST http://localhost:8080/api/mentors
+   //hợp lệ
+   {
+     "mentorId": 3,
+     "department": "Khoa Công nghệ thông tin",
+     "academicRank": "Tiến sĩ"
+   }
+   {
+     "mentorId": 4,
+     "department": "CÔNG nghệ ô tô ",
+     "academicRank": "Tiến sĩ, giáo sư "
+   }
+   // lỗi mentor đã đăng ký và tài khoan user của student
+    {
+        "mentorId": 4,
+        "department": "CÔNG cao cấp ",
+        "academicRank": "Tiến sĩ, giáo sư "
+      }
+      {
+          "mentorId": 1,
+          "department": "CÔNG nghệ ô tô ",
+          "academicRank": "Tiến sĩ, giáo sư "
+        }
+  }
+17#
+   {
+    //hợp lệ
+       http://localhost:8080/api/mentors/3
+       {
+         "mentorId": 3,
+         "department": "CNTN ",
+         "academicRank": "Tiến sĩ, giáo sư "
+       }
+       http://localhost:8080/api/mentors/3
+       {
+                "mentorId": 3,
+                "department": "Công nghê thông tin  ",
+                "academicRank": "Tiến sĩ, giáo sư "
+         }
+      // lỗi trung lặp
+         http://localhost:8080/api/mentors/3
+           {
+                         "mentorId": 4,
+                         "department": "Công nghê thông tin  ",
+                         "academicRank": "Tiến sĩ, giáo sư "
+            }
+   }
+18#
+   {
+   GET http://localhost:8080/api/internship_phases
+   }
+19#
+   {
+     GET http://localhost:8080/api/internship_phases/{phase_id}
+     GET http://localhost:8080/api/internship_phases/1
+     GET http://localhost:8080/api/internship_phases/2
+   }
+20#
+   {
+   POST http://localhost:8080/api/internship_phases
+    //hợp lệ
+    {
+      "phaseName": "Giai đoạn 1 - Định hướng thực tập",
+      "startDate": "2026-05-19",
+      "endDate": "2026-06-30",
+      "description": "Sinh viên tìm hiểu quy trình làm việc và môi trường thực tập"
+    }
+    {
+      "phaseName": "Giai đoạn 2 - Thực hành dự án",
+      "startDate": "2026-07-01",
+      "endDate": "2026-08-31",
+      "description": "Sinh viên tham gia trực tiếp vào dự án thực tế tại doanh nghiệp"
+    }
+    {
+      "phaseName": "Giai đoạn 3 - Báo cáo giữa kỳ",
+      "startDate": "2026-09-01",
+      "endDate": "2026-09-30",
+      "description": "Sinh viên nộp báo cáo tiến độ và trình bày kết quả giữa kỳ với mentor"
+    }
+    // lỗi trung lặp dữ liệu
+      {
+          "phaseName": "Giai đoạn 3 - Báo cáo giữa kỳ",
+          "startDate": "2026-06-01",
+          "endDate": "2026-07-30",
+          "description": "Sinh viên nộp báo cáo tiến độ và trình bày kết quả giữa "
+        }
+   }
+21#
+   {
+     // hợp lệ
+        PUT http://localhost:8080/api/internship_phases/1
+         {
+           "phaseName": "Giai đoạn 1 - Định hướng thực tập cho sinh viên ",
+           "startDate": "2026-04-19",
+           "endDate": "2026-05-30",
+           "description": "Sinh viên tìm hiểu quy trình làm việc và môi trường thực tập"
+         }
+        PUT http://localhost:8080/api/internship_phases/2
+     {
+       "phaseName": "Giai đoạn 2 - Thực hành dự án cho sinh viên ",
+       "startDate": "2026-07-01",
+       "endDate": "2026-08-31",
+       "description": "Sinh viên tham gia trực tiếp vào dự án thực tế tại doanh nghiệp"
+     }
+       PUT http://localhost:8080/api/internship_phases/1
+     // lỗi cập nhật trùng dữ liệu
+         {
+           "phaseName": "Giai đoạn 2 - Thực hành dự án cho sinh viên ",
+           "startDate": "2026-04-19",
+           "endDate": "2026-05-30",
+           "description": "Sinh viên tìm hiểu quy trình làm việc và môi trường thực tập"
+         }
+
+   }
+22#
+  {
+  DELETE http://localhost:8080/api/internship_phases/3
+  }
+23#
+   {
+ GET  http://localhost:8080/api/evaluation_criteria
+   }
+24#
+   {
+    GET  http://localhost:8080/api/evaluation_criteria/{criterion_id}
+   GET  http://localhost:8080/api/evaluation_criteria/1
+   }
+25#
+   {
+   POST http://localhost:8080/api/evaluation_criteria
+   // hợp lệ
+   {
+     "criterionName": "Thái độ và tác phong làm việc",
+     "description": "Đánh giá mức độ chuyên nghiệp, đúng giờ và tinh thần trách nhiệm của sinh viên",
+     "maxScore": 10.00
+   }
+   {
+     "criterionName": "Kỹ năng chuyên môn",
+     "description": "Đánh giá khả năng áp dụng kiến thức chuyên ngành vào công việc thực tế",
+     "maxScore": 30.00
+   }
+   {
+     "criterionName": "Kỹ năng giao tiếp và làm việc nhóm",
+     "description": "Đánh giá khả năng phối hợp với đồng nghiệp, trình bày ý kiến và giải quyết xung đột trong nhóm",
+     "maxScore": 20.00
+   }
+   // trùng dữ liệu
+   {
+     "criterionName": "Kỹ năng giao tiếp và làm việc nhóm",
+     "description": "Đánh giá khả năng phối hợp với đồng nghiệp",
+     "maxScore": 10.00
+   }
+   }
+26#
+  {
+   // hợp lệ
+  PUT http://localhost:8080/api/evaluation_criteria/1
+    {
+       "criterionName": "Thái độ và tác phong làm việc",
+       "description": "Đánh giá mức độ chuyên nghiệp,kỷ luật , đúng giờ và tinh thần trách nhiệm của sinh viên",
+       "maxScore": 14.00
+     }
+     // trùng dữ liệu
+      PUT http://localhost:8080/api/evaluation_criteria/2
+     {
+          "criterionName": "Thái độ và tác phong làm việc",
+          "description": "Đánh giá mứcệm của sinh viên",
+          "maxScore": 14.00
+        }
+  }
+27#
+  {
+  DELETE http://localhost:8080/api/evaluation_criteria/3
+  }
+28#
+   {
+   GET http://localhost:8080/api/assessment_rounds
+   }
+29#
+   {
+         GET http://localhost:8080/api/assessment_rounds/1
+            GET http://localhost:8080/api/assessment_rounds/2
+   }
+30#
+  {
+   // hợp lệ
+   {
+     "phase_id": 1,
+     "roundName": "Đợt đánh giá tuần đầu",
+     "startDate": "2026-05-19",
+     "endDate": "2026-05-26",
+     "description": "Đánh giá khả năng thích nghi và hòa nhập môi trường làm việc của sinh viên"
+   }
+   {
+     "phase_id": 2,
+     "roundName": "Đợt đánh giá giữa kỳ",
+     "startDate": "2026-07-01",
+     "endDate": "2026-08-01",
+     "description": "Đánh giá tiến độ thực hiện dự án và kỹ năng chuyên môn của sinh viên"
+   }
+   {
+     "phase_id": 2,
+     "roundName": "Đợt đánh giá cuối kỳ",
+     "startDate": "2026-07-01",
+     "endDate": "2026-08-30",
+     "description": "Đánh giá tổng kết toàn bộ quá trình thực tập và bảo vệ báo cáo cuối kỳ"
+   }
+   // lỗi dàng buộc dữ liệu
+   {
+     "phase_id": 2023,
+     "roundName": "Đợt đánh giá cuối kỳ",
+     "startDate": "2026-10-01",
+     "endDate": "2026-11-30",
+     "description": "Đánh giá tổng kết toàn bộ quá trình thực tập và bảo vệ báo cáo cuối kỳ"
+   }
+      {
+        "phase_id": 2023,
+        "roundName": "Đợt đánh giá cuối kỳ",
+        "startDate": "2026-10-01",
+        "endDate": "2026-11-30",
+        "description": "Đánh giá tổng kết toàn bộ quá trình thực tập và bảo vệ báo cáo cuối kỳ"
+      }
+  }
+31#
+   {
+   // hợp lệ
+   {
+    PUT http://localhost:8080/api/assessment_rounds/1
+   "phase_id": 1,
+        "roundName": "Đợt đánh giá tuần đầu của năm học ",
+        "startDate": "2026-05-20",
+        "endDate": "2026-05-26",
+        "description": "Đánh giá khả năng thích nghi và hòa nhập môi trường làm việc của sinh viên"
+   }
+}
+32#
+   {
+    DELETE http://localhost:8080/api/assessment_rounds/3
+   }
+33#
+  {
+  GET http://localhost:8080/api/round_criteria
+  }
+34#
+  {
+   GET http://localhost:8080/api/round_criteria/1
+  }
+35#
+  {
+  http://localhost:8080/api/round_criteria
+   // hợp lệ
+   {
+     "round_id": 1,
+     "criterion_id": 1,
+     "weight": 0.30
+   }
+   {
+     "round_id": 2,
+     "criterion_id": 1,
+     "weight": 0.80
+   }
+   {
+     "round_id": 2,
+     "criterion_id": 2,
+     "weight": 0.37
+   }
+   {
+     "round_id": 1,
+     "criterion_id": 2,
+     "weight": 1.30
+   }
+   // lôi giá trị và lỗi trùng lặp
+    {
+        "round_id": 1,
+        "criterion_id": 2,
+        "weight": -1.30
+      }
+  }
+36#
+  {
+  // hơp lệ
+     PUT  http://localhost:8080/api/round_criteria/1
+       {
+             "round_id": 1,
+             "criterion_id": 1,
+             "weight": 2
+           }
+   // lỗi dàng buộc unique và trong  số
+          PUT  http://localhost:8080/api/round_criteria/2
+         {
+                    "round_id": 1,
+                    "criterion_id": 1,
+                    "weight": -2
+                  }
+  }
+37#
+  {
+   DELETE http://localhost:8080/api/round_criteria/1
+  }
+38#
+   {
+   http://localhost:8080/api/internship_assignments
+   }
+39#
+   {
+   http://localhost:8080/api/internship_assignments/1
+   }
+
+40#
+  {
+  POST http://localhost:8080/api/internship_assignments
+  // hợp lê
+  {
+    "studentID": 1,
+    "mentorID": 3,
+    "phaseID": 1,
+    "assignedDate": "2026-05-19T08:00:00"
+  }
+  {
+    "studentID": 1,
+    "mentorID": 3,
+    "phaseID": 2,
+    "assignedDate": "2026-05-19T08:00:00"
+  }
+  {
+    "studentID": 2,
+    "mentorID": 3,
+    "phaseID": 1,
+    "assignedDate": "2026-05-19T08:00:00"
+  }
+  // lỗi trùng lặp dữ liệu
+  {
+      "studentID": 1,
+      "mentorID": 3,
+      "phaseID": 1,
+      "assignedDate": "2026-05-19T08:00:00"
+    }
+  }
+41#
+  {
+    PUT http://localhost:8080/api/internship_assignments/1/status?status=IN_PROGRESS
+  }
+42#
+   {
+    GET http://localhost:8080/api/assessment_results
+   }
+43#
+  {
+  POST http://localhost:8080/api/assessment_results
+   {
+     "assignmentId": 2,
+     "roundId": 1,
+     "criterionId": 1,
+     "evaluatedById": 2,
+     "score": 8.50,
+     "comments": "Sinh viên có thái độ làm việc tốt, đúng giờ và chuyên nghiệp",
+     "evaluationDate": "2026-06-15T10:00:00"
+   }
+  }
+44#
+  {
 
   }
+

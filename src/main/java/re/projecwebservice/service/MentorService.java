@@ -82,6 +82,9 @@ public class MentorService implements IMentorService {
                         "MENTOR chỉ được cập nhật thông tin của chính mình");
             }
         }
+        if(mentorRepository.existsById(mentorId) && !mentorRequest.getMentorId().equals(mentorId)){
+            throw new DataConfickException("ID Mentor này đã tồn tại ");
+        }
         // kiêm tra xem có cần cập nhật không
         if (mentorRequest.getDepartment() != null) {
             mentor.setDepartment(mentorRequest.getDepartment());

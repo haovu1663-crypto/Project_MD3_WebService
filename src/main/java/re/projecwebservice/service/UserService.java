@@ -66,9 +66,15 @@ public class UserService implements IUserService {
         if(userRespository.existsByEmail(register.getEmail())){
             throw new DataConfickException("Email :"+register.getEmail()+" Đã ồn tại ");
         }
+        if(userRespository.existsByUsername(register.getUsername())){
+            throw new DataConfickException("User name : "+register.getUsername()+"này tồn tại ");
+        }
+        if (userRespository.existsByPhoneNumber(register.getPhoneNumber())) {
+            throw new DataConfickException("SDT :"+register.getPhoneNumber()+" này đã tồn tại ");
+        }
         user.setPasswordHash(passwordEncoder.encode(register.getPasswordHash()));
         user.setCreatedAt(LocalDateTime.now());
-        user.setIsActive(true);
+        user.setIsActive(false);
         userRespository.save(user);
         return modelMapper.map(register, RegisterRespone.class);
     }
@@ -103,9 +109,19 @@ public class UserService implements IUserService {
     public UserRespone update(Register register,Integer id) throws ResourceNotFoundException, DataConfickException {
         Users users = userRespository.findById(id).orElseThrow(()->new ResourceNotFoundException("User Dont Exit"));
         Users checkEmail =userRespository.findByEmail(register.getEmail());
+        // kiểm tra email
         if(checkEmail!=null && !checkEmail.getUserId().equals(users.getUserId())){
             throw new DataConfickException("Email :"+register.getEmail()+" Đã ồn tại ");
         }
+        Users checkUser = userRespository.findByUsername(register.getUsername()).orElse(null);
+        if(checkUser!=null && !checkUser.getUserId().equals(users.getUserId())){
+            throw new DataConfickException("User name : "+register.getUsername()+"này tồn tại ");
+        }
+        Users checkPhone = userRespository.findByPhoneNumber(register.getPhoneNumber());
+        if(checkPhone!=null && !checkPhone.getUserId().equals(users.getUserId())){
+            throw new DataConfickException("SDT :"+register.getPhoneNumber()+" này đã tồn tại ");
+        }
+
         users.setFullName(register.getFullName());
         users.setPasswordHash(passwordEncoder.encode(register.getPasswordHash()));
         users.setRole(register.getRole());
@@ -141,9 +157,15 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public UserRespone delete(Integer id) throws ResourceNotFoundException {
+    public UserRespone delete(Integer id) throws ResourceNotFoundException, DataConfickException {
         Users users = userRespository.findById(id).orElseThrow(()->new ResourceNotFoundException("User Dont Exit"));
         UserRespone userRespone = modelMapper.map(users, UserRespone.class);
+        if(userRespository.existsAsStudent(id)){
+            throw new DataConfickException("không thể xóa tài khoàn student này  ");
+        }
+        if(userRespository.existsAsMentor(id)){
+            throw new DataConfickException("không thể xóa tài khoàn Mentor này   ");
+        }
         userRespository.delete(users);
         return userRespone;
     }

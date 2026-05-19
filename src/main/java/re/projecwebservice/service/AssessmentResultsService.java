@@ -139,7 +139,6 @@ public class AssessmentResultsService implements IAssessmentResultsService {
             throw new DataConfickException(
                     "Bạn không có quyền cập nhật kết quả này, chỉ mentor đã tạo mới được sửa");
         }
-
         // 4. Kiểm tra score không vượt maxScore của tiêu chí
         if (request.getScore() != null &&
                 request.getScore().compareTo(entity.getCriterion().getMaxScore()) > 0) {

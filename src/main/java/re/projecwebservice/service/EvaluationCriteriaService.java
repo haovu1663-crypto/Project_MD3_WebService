@@ -65,6 +65,12 @@ public class EvaluationCriteriaService implements IEvaluationCriteriaService {
         EvaluationCriteria criteria = evaluationCriteriaRepository.findById(criterionId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Không tìm thấy tiêu chí đánh giá với id: " + criterionId));
+        if(evaluationCriteriaRepository.existsAssessmentResultByCriterionId(criterionId)) {
+            throw new DataConfickException("tiêu chí đánh giá này đã có trong kết quả đánh giá không thể xóa ");
+        }
+        if (evaluationCriteriaRepository.existsRoundCriteriaByCriterionId(criterionId)) {
+            throw new DataConfickException("tiêu chí đánh giá này đã có trong tiêu chí của đợt  đánh giá không thể xóa ");
+        }
         evaluationCriteriaRepository.delete(criteria);
         return mapper.mapEntityToRespone(criteria);
     }

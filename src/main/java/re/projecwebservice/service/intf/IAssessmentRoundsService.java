@@ -18,5 +18,5 @@ public interface IAssessmentRoundsService {
     AssessmentRoundsRespone getById(Integer roundId) throws ResourceNotFoundException;
     AssessmentRoundsRespone update(Integer roundId, AssessmentRoundsResquest request)
             throws DataConfickException, ResourceNotFoundException;
-    AssessmentRoundsRespone delete(Integer roundId) throws ResourceNotFoundException;
+    AssessmentRoundsRespone delete(Integer roundId) throws ResourceNotFoundException, DataConfickException;
 }

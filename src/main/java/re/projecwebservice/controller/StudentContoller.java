@@ -36,7 +36,7 @@ public class StudentContoller {
     }
     // 11
     @PreAuthorize("hasAnyAuthority('ROLE_ADMIN','ROLE_MENTOR','ROLE_STUDENT')")
-    @GetMapping("/student/{id}")
+    @GetMapping("/students/{id}")
     public ResponseEntity<?> getStudent(@Valid @PathVariable Integer id) throws ResourceNotFoundException {
         StudentRespone studentRespone = studentService.getStudentById(id);
         ApiResponse<StudentRespone> apiResponse = new ApiResponse<>(

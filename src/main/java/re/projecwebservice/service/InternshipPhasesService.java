@@ -68,10 +68,16 @@ public class InternshipPhasesService implements IInternshipPhasesService {
         return mapper.mapEntityToRespone(internshipPhasesRepository.save(phase));
     }
     @Override
-    public InternshipPhasesRespone delete(Integer phaseId) throws ResourceNotFoundException {
+    public InternshipPhasesRespone delete(Integer phaseId) throws ResourceNotFoundException, DataConfickException {
         InternshipPhases phase = internshipPhasesRepository.findById(phaseId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Không tìm thấy giai đoạn thực tập với id: " + phaseId));
+        if(internshipPhasesRepository.existsInternshipAssignmentByPhaseId(phaseId)){
+            throw new DataConfickException("giai đoạn thực tập này đã có trong phân công thực tập không thể xóa ");
+        }
+        if (internshipPhasesRepository.existsAssessmentRoundByPhaseId(phaseId)) {
+            throw new DataConfickException("giai đoạn thực tập này đã có trong đợt đánh giá  không thể xóa ");
+        }
         internshipPhasesRepository.delete(phase);
         return mapper.mapEntityToRespone(phase);
     }

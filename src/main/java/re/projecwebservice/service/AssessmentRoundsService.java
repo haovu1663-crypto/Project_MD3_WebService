@@ -87,10 +87,16 @@ public class AssessmentRoundsService implements IAssessmentRoundsService {
         return mapper.mapEntityToRespone(assessmentRoundsRepository.save(round));
     }
     @Override
-    public AssessmentRoundsRespone delete(Integer roundId) throws ResourceNotFoundException {
+    public AssessmentRoundsRespone delete(Integer roundId) throws ResourceNotFoundException, DataConfickException {
         AssessmentRounds round = assessmentRoundsRepository.findById(roundId)
                 .orElseThrow(() -> new ResourceNotFoundException(
                         "Không tìm thấy đợt đánh giá với id: " + roundId));
+        if(assessmentRoundsRepository.existsRoundCriteriaByRoundId(roundId)) {
+            throw new DataConfickException("không thể xóa đợt đánh giá này vì đượt đánh giá này đã có trong tiêu chí của đợt đánh giá ");
+        }
+        if(assessmentRoundsRepository.existsAssessmentResultByRoundId(roundId)) {
+            throw new DataConfickException("không thể xóa đợt đánh giá này vì đượt đánh giá này đã có trong kết quả đánh giá  ");
+        }
         assessmentRoundsRepository.delete(round);
         return mapper.mapEntityToRespone(round);
     }

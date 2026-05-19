@@ -83,7 +83,7 @@ public class SecurityConfig {
                 // phân quyền cho các API theo đường dẫn
                 .authorizeHttpRequests(
                         req->
-                                req    .requestMatchers("/api/users/register").permitAll()
+                                req
 
                                         .requestMatchers("/api/auth/login").permitAll()
 

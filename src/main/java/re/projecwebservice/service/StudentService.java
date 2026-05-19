@@ -8,6 +8,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
+import re.projecwebservice.ModelMapper.StudentMapper;
 import re.projecwebservice.dto.respone.StudentRespone;
 import re.projecwebservice.dto.respone.UserRespone;
 import re.projecwebservice.dto.resquest.StudentRequest;
@@ -28,6 +29,7 @@ public class StudentService implements IStudentService {
     private final UserRespository userRespository;
     private final StudentRespository studentRespository;
     private final ModelMapper modelMapper;
+    private final StudentMapper mapper;
     @Override
     public List<StudentRespone> getStudent() throws ResourceNotFoundException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -59,28 +61,31 @@ public class StudentService implements IStudentService {
             throw new DataConfickException("Mã Student này đã tồn tại");
         }
 
-        // 4. Tạo Students thủ công — KHÔNG dùng ModelMapper để tránh lỗi null identifier với @MapsId
-        Students student = new Students();
-        student.setUser(user);
-        student.setStudentCode(studentRequest.getStudentCode());
-        student.setMajor(studentRequest.getMajor());
-        student.setClazz(studentRequest.getClazz());
-        student.setDateOfBirth(studentRequest.getDateOfBirth());
-        student.setAddress(studentRequest.getAddress());
-
-        // 5. Lưu
+//        // 4. Tạo Students thủ công — KHÔNG dùng ModelMapper để tránh lỗi null identifier với @MapsId
+//        Students student = new Students();
+//        student.setUser(user);
+//        student.setStudentCode(studentRequest.getStudentCode());
+//        student.setMajor(studentRequest.getMajor());
+//        student.setClazz(studentRequest.getClazz());
+//        student.setDateOfBirth(studentRequest.getDateOfBirth());
+//        student.setAddress(studentRequest.getAddress());
+//
+//        // 5. Lưu
+//        studentRespository.save(student);
+//
+//        // 6. Map thủ công sang StudentRespone (field user_id không map được tự động qua ModelMapper)
+//        StudentRespone response = new StudentRespone();
+//        response.setStudentId(student.getStudentId());
+//        response.setStudentCode(student.getStudentCode());
+//        response.setMajor(student.getMajor());
+//        response.setClazz(student.getClazz());
+//        response.setDateOfBirth(student.getDateOfBirth());
+//        response.setAddress(student.getAddress());
+//
+//        return response;
+        Students  student = mapper.mapRequestToEntity(studentRequest);
         studentRespository.save(student);
-
-        // 6. Map thủ công sang StudentRespone (field user_id không map được tự động qua ModelMapper)
-        StudentRespone response = new StudentRespone();
-        response.setStudentId(student.getStudentId());
-        response.setStudentCode(student.getStudentCode());
-        response.setMajor(student.getMajor());
-        response.setClazz(student.getClazz());
-        response.setDateOfBirth(student.getDateOfBirth());
-        response.setAddress(student.getAddress());
-
-        return response;
+        return  mapper.mapEntityToResponse(student);
     }
 
     @Override
@@ -109,33 +114,37 @@ public class StudentService implements IStudentService {
             throws ResourceNotFoundException, DataConfickException {
 
         // 1. Kiểm tra student tồn tại
-        Students student = studentRespository.findById(id)
+        Students students = studentRespository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Student này không tồn tại"));
 
         // 2. Kiểm tra studentCode trùng với student KHÁC
         if (studentRespository.existsByStudentCode(studentRequest.getStudentCode())
-                && !student.getStudentCode().equals(studentRequest.getStudentCode())) {
+                && !students.getStudentCode().equals(studentRequest.getStudentCode())) {
             throw new DataConfickException("Mã Student này đã tồn tại");
         }
 
-        // 3. Cập nhật các field
-        student.setStudentCode(studentRequest.getStudentCode());
-        student.setMajor(studentRequest.getMajor());
-        student.setClazz(studentRequest.getClazz());
-        student.setDateOfBirth(studentRequest.getDateOfBirth());
-        student.setAddress(studentRequest.getAddress());
-
+//        // 3. Cập nhật các field
+//        student.setStudentCode(studentRequest.getStudentCode());
+//        student.setMajor(studentRequest.getMajor());
+//        student.setClazz(studentRequest.getClazz());
+//        student.setDateOfBirth(studentRequest.getDateOfBirth());
+//        student.setAddress(studentRequest.getAddress());
+//
+//        studentRespository.save(student);
+//
+//        // 4. Map response thủ công (tránh lỗi ModelMapper với @MapsId)
+//        StudentRespone response = new StudentRespone();
+//        response.setStudentId(student.getStudentId());
+//        response.setStudentCode(student.getStudentCode());
+//        response.setMajor(student.getMajor());
+//        response.setClazz(student.getClazz());
+//        response.setDateOfBirth(student.getDateOfBirth());
+//        response.setAddress(student.getAddress());
+//
+//        return response;
+        Students  student = mapper.mapRequestToEntity(studentRequest);
+        student.setStudentId(id);
         studentRespository.save(student);
-
-        // 4. Map response thủ công (tránh lỗi ModelMapper với @MapsId)
-        StudentRespone response = new StudentRespone();
-        response.setStudentId(student.getStudentId());
-        response.setStudentCode(student.getStudentCode());
-        response.setMajor(student.getMajor());
-        response.setClazz(student.getClazz());
-        response.setDateOfBirth(student.getDateOfBirth());
-        response.setAddress(student.getAddress());
-
-        return response;
+        return  mapper.mapEntityToResponse(student);
     }
 }

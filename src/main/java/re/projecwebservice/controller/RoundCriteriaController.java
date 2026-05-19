@@ -69,7 +69,7 @@ public class RoundCriteriaController {
     @DeleteMapping("/round_criteria/{round_criterion_id}")
     public ResponseEntity<?> delete(
             @PathVariable("round_criterion_id") Integer roundCriterionId)
-            throws ResourceNotFoundException {
+            throws ResourceNotFoundException, DataConfickException {
         RoundCriteriaRespone data = roundCriteriaService.delete(roundCriterionId);
         ApiResponse<RoundCriteriaRespone> apiResponse = new ApiResponse<>(
                 "delete round criteria", "200 OK", data, null, LocalDateTime.now()

@@ -30,7 +30,8 @@ public class UserController {
     public ResponseEntity<?> login(@Valid@RequestBody Login login) {
         return  new ResponseEntity<>(userService.login(login), HttpStatus.OK);
     }
-    @PostMapping("/users/register")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
+    @PostMapping("/users")
     public ResponseEntity<?> rigister(@Valid @RequestBody Register register) throws DataConfickException {
         return new ResponseEntity<>(userService.register(register), HttpStatus.CREATED);
     }
@@ -40,6 +41,7 @@ public class UserController {
         // Truyền cả request vào service để xử lý
         return new ResponseEntity<>(userService.getMe(), HttpStatus.OK);
     }
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping("/users")
     public ResponseEntity<?> getUsers() {
         List<UserRespone> userRespones= userService.getUser();
@@ -48,6 +50,7 @@ public class UserController {
         );
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @GetMapping("users/{id}")
     public ResponseEntity<?> getUserById(@Valid @PathVariable Integer id) throws ResourceNotFoundException {
         UserRespone users = userService.getUserById(id);
@@ -56,6 +59,7 @@ public class UserController {
         );
         return  new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PutMapping("/users/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Integer id, @Valid @RequestBody Register register) throws ResourceNotFoundException, DataConfickException {
         UserRespone userRespone = userService.update(register,id);
@@ -64,6 +68,7 @@ public class UserController {
         );
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     @PutMapping("/users/{id}/status")
     public ResponseEntity<?>updateStatus(@PathVariable Integer id) throws ResourceNotFoundException {
         UserRespone userRespone = userService.upadteStatus(id);
@@ -81,7 +86,7 @@ public class UserController {
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
     @DeleteMapping("/users/{id}")
-    public ResponseEntity<?>delete(@PathVariable Integer id) throws ResourceNotFoundException {
+    public ResponseEntity<?>delete(@PathVariable Integer id) throws ResourceNotFoundException, DataConfickException {
         UserRespone userRespone = userService.delete(id);
         ApiResponse<UserRespone> apiResponse = new ApiResponse<>(
                 "delete user ","200 OK",userRespone,null, LocalDateTime.now()

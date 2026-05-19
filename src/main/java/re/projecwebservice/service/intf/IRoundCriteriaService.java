@@ -15,5 +15,5 @@ public interface IRoundCriteriaService {
 
     RoundCriteriaRespone update(Integer roundCriterionId, RoundCriteriaRequest request)
             throws ResourceNotFoundException, DataConfickException;
-    RoundCriteriaRespone delete(Integer roundCriterionId) throws ResourceNotFoundException;
+    RoundCriteriaRespone delete(Integer roundCriterionId) throws ResourceNotFoundException, DataConfickException;
 }

@@ -14,5 +14,5 @@ public interface IInternshipPhasesService {
     InternshipPhasesRespone getById(Integer phaseId) throws ResourceNotFoundException;
     InternshipPhasesRespone update(Integer phaseId, InternshipPhasesRequest request)
             throws DataConfickException, ResourceNotFoundException;
-    InternshipPhasesRespone delete(Integer phaseId) throws ResourceNotFoundException;
+    InternshipPhasesRespone delete(Integer phaseId) throws ResourceNotFoundException, DataConfickException;
 }

@@ -21,6 +21,6 @@ public interface IUserService {
     UserRespone update(Register register, Integer id) throws ResourceNotFoundException, DataConfickException;
     UserRespone upadteStatus(Integer id) throws ResourceNotFoundException;
     UserRespone updateRole(Integer id, Role role) throws ResourceNotFoundException;
-    UserRespone delete(Integer id) throws ResourceNotFoundException;
+    UserRespone delete(Integer id) throws ResourceNotFoundException, DataConfickException;
 
 }
